@@ -1,0 +1,7 @@
+﻿services:
+  mailingpoc:
+    image: mailingpoc
+    build:
+      context: .
+      dockerfile: MailingPoC/Dockerfile
+
