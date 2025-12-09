@@ -1,4 +1,4 @@
-namespace MailingPoC.Ses;
+namespace MailingPoC.Features.Emails.Services;
 
 public class Email
 {

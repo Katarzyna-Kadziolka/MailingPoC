@@ -1,6 +1,4 @@
-using MailingPoC.Ses;
-
-namespace MailingPoC.Services;
+namespace MailingPoC.Features.Emails.Services;
 
 public interface IEmailService
 {

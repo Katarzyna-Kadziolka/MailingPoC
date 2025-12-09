@@ -1,14 +1,13 @@
-using MailingPoC.Ses;
 using MailKit.Net.Smtp;
 using MimeKit;
 
-namespace MailingPoC.Services;
+namespace MailingPoC.Features.Emails.Services;
 
 public class MailhogService : IEmailService
 {
     public async Task<string> SendEmailAsync(Email email)
     {
-        var bodyHtml = await File.ReadAllTextAsync("Templates/TestEmail.html");
+        var bodyHtml = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.html");
         
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(email.SenderAddress, email.SenderAddress));

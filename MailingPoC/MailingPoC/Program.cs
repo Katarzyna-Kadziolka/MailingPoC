@@ -1,7 +1,7 @@
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.SimpleEmail;
 using LocalStack.Client.Extensions;
-using MailingPoC.Services;
+using MailingPoC.Features.Emails.Services;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);

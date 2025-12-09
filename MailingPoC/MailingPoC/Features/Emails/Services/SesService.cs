@@ -1,9 +1,8 @@
 using System.Net;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
-using MailingPoC.Ses;
 
-namespace MailingPoC.Services;
+namespace MailingPoC.Features.Emails.Services;
 
 public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IEmailService
 {
