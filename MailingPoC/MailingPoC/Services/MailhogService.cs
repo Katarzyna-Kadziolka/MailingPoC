@@ -6,6 +6,7 @@ namespace MailingPoC.Services;
 
 public class MailhogService : IEmailService
 {
+    private const string BodyHtml = "<html><body><h1>Hello World!</h1></body></html>";
     public async Task<string> SendEmailAsync(SendEmailArgs args)
     {
         var message = new MimeMessage();
@@ -15,7 +16,7 @@ public class MailhogService : IEmailService
 
         message.Body = new TextPart("html")
         {
-            Text = args.BodyHtml
+            Text = BodyHtml
         };
 
         using var client = new SmtpClient();

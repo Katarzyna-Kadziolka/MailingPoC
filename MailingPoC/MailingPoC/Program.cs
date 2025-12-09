@@ -20,7 +20,7 @@ builder.Services.AddLocalStack(builder.Configuration);
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSServiceLocalStack<IAmazonSimpleEmailService>();
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsProduction())
 {
     builder.Services.AddTransient<IEmailService, SesService>();
 }

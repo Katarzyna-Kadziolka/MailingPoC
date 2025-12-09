@@ -1,3 +1,4 @@
+using System.Net;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using MailingPoC.Ses;
@@ -9,6 +10,8 @@ public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IE
 
     public async Task<string> SendEmailAsync(SendEmailArgs args)
     {
+        await VerifyEmailIdentityAsync(args.SenderAddress);
+
         var messageId = "";
         try
         {
@@ -52,5 +55,25 @@ public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IE
         }
 
         return messageId;
+    }
+    private async Task<bool> VerifyEmailIdentityAsync(string recipientEmailAddress)
+    {
+        var success = false;
+        try
+        {
+            var response = await amazonSimpleEmailService.VerifyEmailIdentityAsync(
+                new VerifyEmailIdentityRequest
+                {
+                    EmailAddress = recipientEmailAddress
+                });
+
+            success = response.HttpStatusCode == HttpStatusCode.OK;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("VerifyEmailIdentityAsync failed with exception: " + ex.Message);
+        }
+
+        return success;
     }
 }
