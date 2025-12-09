@@ -9,7 +9,14 @@
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.Core" Version="4.0.3.3" />
+        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.14" />
+        <PackageReference Include="AWSSDK.SimpleEmail" Version="4.0.2.5" />
+        <PackageReference Include="LocalStack.Client" Version="2.0.0" />
+        <PackageReference Include="LocalStack.Client.Extensions" Version="2.0.0" />
+        <PackageReference Include="MailKit" Version="4.14.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>

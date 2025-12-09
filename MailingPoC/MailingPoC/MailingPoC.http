@@ -1,6 +1,6 @@
 @MailingPoC_HostAddress = http://localhost:5137
 
-GET {{MailingPoC_HostAddress}}/weatherforecast/
+GET {{MailingPoC_HostAddress}}/email
 Accept: application/json
 
 ###
