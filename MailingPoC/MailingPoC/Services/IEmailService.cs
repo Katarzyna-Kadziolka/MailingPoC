@@ -4,5 +4,5 @@ namespace MailingPoC.Services;
 
 public interface IEmailService
 {
-    public Task<string> SendEmailAsync(SendEmailArgs args);
+    public Task<string> SendEmailAsync(Email email);
 }

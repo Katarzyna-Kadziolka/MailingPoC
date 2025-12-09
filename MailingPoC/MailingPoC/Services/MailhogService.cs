@@ -6,17 +6,18 @@ namespace MailingPoC.Services;
 
 public class MailhogService : IEmailService
 {
-    private const string BodyHtml = "<html><body><h1>Hello World!</h1></body></html>";
-    public async Task<string> SendEmailAsync(SendEmailArgs args)
+    public async Task<string> SendEmailAsync(Email email)
     {
+        var bodyHtml = await File.ReadAllTextAsync("Templates/TestEmail.html");
+        
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(args.SenderAddress, args.SenderAddress));
-        message.To.Add(new MailboxAddress(args.ToAddresses[0], args.ToAddresses[0]));
-        message.Subject = args.Subject;
+        message.From.Add(new MailboxAddress(email.SenderAddress, email.SenderAddress));
+        message.To.Add(new MailboxAddress(email.ToAddresses[0], email.ToAddresses[0]));
+        message.Subject = email.Subject;
 
         message.Body = new TextPart("html")
         {
-            Text = BodyHtml
+            Text = bodyHtml
         };
 
         using var client = new SmtpClient();

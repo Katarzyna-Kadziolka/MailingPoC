@@ -9,9 +9,9 @@ namespace MailingPoC.Controllers;
 public class EmailsController(IEmailService emailService)
 {
 
-    [HttpPost(nameof(SendEmail))]
-    public async Task<string> SendEmail([FromBody]SendEmailArgs args)
+    [HttpPost]
+    public async Task<string> SendEmail([FromBody]Email email)
     {
-        return await emailService.SendEmailAsync(args);
+        return await emailService.SendEmailAsync(email);
     }
 }

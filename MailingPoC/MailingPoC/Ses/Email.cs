@@ -1,6 +1,6 @@
 namespace MailingPoC.Ses;
 
-public class SendEmailArgs
+public class Email
 {
     public List<string> ToAddresses { get; set; } = new();
     public List<string> CcAddresses { get; set; } = new();

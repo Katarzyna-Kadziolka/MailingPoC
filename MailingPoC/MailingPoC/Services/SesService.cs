@@ -8,9 +8,9 @@ namespace MailingPoC.Services;
 public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IEmailService
 {
 
-    public async Task<string> SendEmailAsync(SendEmailArgs args)
+    public async Task<string> SendEmailAsync(Email email)
     {
-        await VerifyEmailIdentityAsync(args.SenderAddress);
+        await VerifyEmailIdentityAsync(email.SenderAddress);
 
         var messageId = "";
         try
@@ -20,9 +20,9 @@ public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IE
                 {
                     Destination = new Destination
                     {
-                        BccAddresses = args.BccAddresses,
-                        CcAddresses = args.CcAddresses,
-                        ToAddresses = args.ToAddresses
+                        BccAddresses = email.BccAddresses,
+                        CcAddresses = email.CcAddresses,
+                        ToAddresses = email.ToAddresses
                     },
                     Message = new Message
                     {
@@ -31,21 +31,21 @@ public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IE
                             Html = new Content
                             {
                                 Charset = "UTF-8",
-                                Data = args.BodyHtml
+                                Data = email.BodyHtml
                             },
                             Text = new Content
                             {
                                 Charset = "UTF-8",
-                                Data = args.BodyText
+                                Data = email.BodyText
                             }
                         },
                         Subject = new Content
                         {
                             Charset = "UTF-8",
-                            Data = args.Subject
+                            Data = email.Subject
                         }
                     },
-                    Source = args.SenderAddress
+                    Source = email.SenderAddress
                 });
             messageId = response.MessageId;
         }
