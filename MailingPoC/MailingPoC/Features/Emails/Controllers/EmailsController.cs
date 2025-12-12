@@ -7,11 +7,11 @@ namespace MailingPoC.Features.Emails.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class EmailsController(IEmailService emailService)
+public class EmailsController(IEmailService emailService) : ControllerBase
 {
     [HttpPost]
-    public async Task<string> SendEmail([FromBody]SendEmailRequest request)
+    public async Task<SendEmailResult> SendEmail([FromBody]SendEmailRequest request)
     {
-        return await emailService.SendEmailAsync(request.ToEmail());
+        return await emailService.SendEmailAsync(request.ToEmail(), HttpContext.RequestAborted);
     }
 }

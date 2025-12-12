@@ -26,7 +26,9 @@ if (builder.Environment.IsProduction())
 }
 else
 {
-    builder.Services.AddTransient<IEmailService, MailhogService>();
+    builder.Services.AddTransient<IEmailService, SesService>();
+    
+    // builder.Services.AddTransient<IEmailService, MailhogService>();
 }
 
 var app = builder.Build();

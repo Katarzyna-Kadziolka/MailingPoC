@@ -1,78 +1,72 @@
 using System.Net;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
+using MailingPoC.Features.Emails.Requests.SendEmail;
+using SendEmailRequest = Amazon.SimpleEmail.Model.SendEmailRequest;
 
 namespace MailingPoC.Features.Emails.Services;
 
 public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IEmailService
 {
 
-    public async Task<string> SendEmailAsync(Email email)
+    public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-        await VerifyEmailIdentityAsync(email.SenderAddress);
+        await VerifyEmailIdentityAsync(email.SenderAddress, cancellationToken);
 
-        var messageId = "";
-        try
+        var request = CreateSendEmailRequest(email);
+
+        var response = await amazonSimpleEmailService.SendEmailAsync(request, cancellationToken);
+        if (response.HttpStatusCode != HttpStatusCode.OK)
         {
-            var response = await amazonSimpleEmailService.SendEmailAsync(
-                new SendEmailRequest
-                {
-                    Destination = new Destination
-                    {
-                        BccAddresses = email.BccAddresses,
-                        CcAddresses = email.CcAddresses,
-                        ToAddresses = email.ToAddresses
-                    },
-                    Message = new Message
-                    {
-                        Body = new Body
-                        {
-                            Html = new Content
-                            {
-                                Charset = "UTF-8",
-                                Data = email.BodyHtml
-                            },
-                            Text = new Content
-                            {
-                                Charset = "UTF-8",
-                                Data = email.BodyText
-                            }
-                        },
-                        Subject = new Content
-                        {
-                            Charset = "UTF-8",
-                            Data = email.Subject
-                        }
-                    },
-                    Source = email.SenderAddress
-                });
-            messageId = response.MessageId;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("SendEmailAsync failed with exception: " + ex.Message);
+            return new SendEmailResult { IsSent = false };
         }
 
-        return messageId;
+        return new SendEmailResult { IsSent = true };
     }
-    private async Task<bool> VerifyEmailIdentityAsync(string recipientEmailAddress)
+
+    private static SendEmailRequest CreateSendEmailRequest(Email email)
     {
-        var success = false;
-        try
+        return new SendEmailRequest
         {
-            var response = await amazonSimpleEmailService.VerifyEmailIdentityAsync(
-                new VerifyEmailIdentityRequest
+            Destination = new Destination
+            {
+                BccAddresses = email.BccAddresses,
+                CcAddresses = email.CcAddresses,
+                ToAddresses = email.ToAddresses
+            },
+            Message = new Message
+            {
+                Body = new Body
                 {
-                    EmailAddress = recipientEmailAddress
-                });
+                    Html = new Content
+                    {
+                        Charset = "UTF-8",
+                        Data = email.BodyHtml
+                    },
+                    Text = new Content
+                    {
+                        Charset = "UTF-8",
+                        Data = email.BodyText
+                    }
+                },
+                Subject = new Content
+                {
+                    Charset = "UTF-8",
+                    Data = email.Subject
+                }
+            },
+            Source = email.SenderAddress
+        };
+    }
 
-            success = response.HttpStatusCode == HttpStatusCode.OK;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("VerifyEmailIdentityAsync failed with exception: " + ex.Message);
-        }
-
-        return success;
+    private async Task VerifyEmailIdentityAsync(string recipientEmailAddress, CancellationToken cancellationToken = default)
+    {
+        await amazonSimpleEmailService.VerifyEmailIdentityAsync(
+            new VerifyEmailIdentityRequest
+            {
+                EmailAddress = recipientEmailAddress
+            },
+            cancellationToken
+        );
     }
 }

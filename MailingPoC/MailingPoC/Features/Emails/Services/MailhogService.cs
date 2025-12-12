@@ -1,3 +1,4 @@
+using MailingPoC.Features.Emails.Requests.SendEmail;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -5,7 +6,7 @@ namespace MailingPoC.Features.Emails.Services;
 
 public class MailhogService : IEmailService
 {
-    public async Task<string> SendEmailAsync(Email email)
+    public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
         var bodyHtml = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.html");
         
@@ -20,11 +21,14 @@ public class MailhogService : IEmailService
         };
 
         using var client = new SmtpClient();
-        await client.ConnectAsync("localhost", 1025, false);
+        await client.ConnectAsync("localhost", 1025, false, cancellationToken);
 
-        var messageId = await client.SendAsync(message);
-        await client.DisconnectAsync(true);
+        await client.SendAsync(message, cancellationToken);
+        await client.DisconnectAsync(true, cancellationToken);
         
-        return messageId;
+        return new SendEmailResult()
+        {
+            IsSent = true
+        };
     }
 }

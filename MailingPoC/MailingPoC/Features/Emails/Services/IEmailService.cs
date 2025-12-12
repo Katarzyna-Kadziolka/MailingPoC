@@ -1,6 +1,8 @@
+using MailingPoC.Features.Emails.Requests.SendEmail;
+
 namespace MailingPoC.Features.Emails.Services;
 
 public interface IEmailService
 {
-    public Task<string> SendEmailAsync(Email email);
+    Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default);
 }
