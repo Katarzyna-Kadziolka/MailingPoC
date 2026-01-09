@@ -33,6 +33,9 @@
       <None Update="Features\Emails\Templates\TestEmail.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Features\Emails\Templates\TestEmail.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -8,17 +8,20 @@ public class MailhogService : IEmailService
 {
     public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-        var bodyHtml = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.html");
+        var bodyHtml = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.html", cancellationToken);
+        var bodyText = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.txt", cancellationToken);
         
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(email.SenderAddress, email.SenderAddress));
         message.To.Add(new MailboxAddress(email.ToAddresses[0], email.ToAddresses[0]));
         message.Subject = email.Subject;
-
-        message.Body = new TextPart("html")
+        
+        var builder = new BodyBuilder
         {
-            Text = bodyHtml
+            HtmlBody = bodyHtml,
+            TextBody = bodyText
         };
+        message.Body = builder.ToMessageBody();
 
         using var client = new SmtpClient();
         await client.ConnectAsync("localhost", 1025, false, cancellationToken);

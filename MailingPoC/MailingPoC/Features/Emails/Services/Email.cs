@@ -2,7 +2,7 @@ namespace MailingPoC.Features.Emails.Services;
 
 public class Email
 {
-    public List<string> ToAddresses { get; set; } = new();
+    public required List<string> ToAddresses { get; set; } = new();
     public List<string> CcAddresses { get; set; } = new();
     public List<string> BccAddresses { get; set; } = new();
     public required string BodyHtml { get; set; }
