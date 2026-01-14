@@ -1,4 +1,5 @@
 using MailingPoC.Features.Emails.Requests.SendEmail;
+using MailingPoC.Features.Emails.Templates;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -8,7 +9,9 @@ public class MailhogService : IEmailService
 {
     public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-        var bodyHtml = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.html", cancellationToken);
+        TemplatesProvider templatesProvider = new();
+
+        var bodyHtml = templatesProvider.RenderTestTemplate();
         var bodyText = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.txt", cancellationToken);
         
         var message = new MimeMessage();
