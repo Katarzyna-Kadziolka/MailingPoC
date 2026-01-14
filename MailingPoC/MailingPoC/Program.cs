@@ -1,6 +1,7 @@
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.SimpleEmail;
 using LocalStack.Client.Extensions;
+using MailingPoC.Features.Emails.Options;
 using MailingPoC.Features.Emails.Services;
 using Microsoft.OpenApi;
 
@@ -20,15 +21,16 @@ builder.Services.AddLocalStack(builder.Configuration);
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSServiceLocalStack<IAmazonSimpleEmailService>();
 
-if (builder.Environment.IsProduction())
+builder.Services.AddOptions<SmtpOptions>().BindConfiguration(SmtpOptions.SectionName);
+
+var smtpOptions = builder.Configuration.GetSection(SmtpOptions.SectionName).Get<SmtpOptions>();
+if (smtpOptions!.UseLocalSmtp)
 {
-    builder.Services.AddTransient<IEmailService, SesService>();
+    builder.Services.AddTransient<IEmailService, MailhogService>();
 }
 else
 {
-    // builder.Services.AddTransient<IEmailService, SesService>();
-    
-    builder.Services.AddTransient<IEmailService, MailhogService>();
+    builder.Services.AddTransient<IEmailService, SesService>();
 }
 
 var app = builder.Build();

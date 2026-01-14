@@ -11,13 +11,13 @@ namespace MailingPoC.Features.Emails.Controllers;
 [Route("[controller]")]
 public class EmailsController(IEmailService emailService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost(nameof(SendEmail))]
     public async Task<SendEmailResult> SendEmail([FromBody]SendEmailRequest request)
     {
         return await emailService.SendEmailAsync(request.ToEmail(), HttpContext.RequestAborted);
     }
 
-    [HttpPost]
+    [HttpPost(nameof(SendOrderEmail))]
     public async Task<SendEmailResult> SendOrderEmail([FromBody]SendOrderEmailRequest request)
     {
         var bodyHtml = await SystemFile.ReadAllTextAsync("Features/Emails/Templates/TestEmail.html", HttpContext.RequestAborted);
