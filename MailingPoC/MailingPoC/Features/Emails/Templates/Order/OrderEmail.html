@@ -42,7 +42,7 @@
                 <table style="background-color: #f7f7f7; align-content: center; padding: 30px;  font-size: 14px; height: 100%; width: 100%;">
                     <tr>
                         <td>
-                            <p style="margin-top: 0; font-size: 20px"><b>Cześć Katarzyna,</b></p>
+                            <p style="margin-top: 0; font-size: 20px"><b>Cześć {{UserName}},</b></p>
                         </td>
                     </tr>
                     <tr>
@@ -67,7 +67,7 @@
                     </tr>
                     <tr>
                         <td style="padding-top: 45px">
-                            <span style="font-size: 16px;"><b>Zamówienie numer: 12345 (17.12.2025 08:00)</b></span>
+                            <span style="font-size: 16px;"><b>Zamówienie numer: {{OrderNumber}} ({{OrderDate}})</b></span>
                         </td>
                     </tr>
                 </table>
@@ -81,24 +81,26 @@
                             <b>Lista produktów:</b>
                         </td>
                     </tr>
+                    {{#each Products}}
                     <tr>
                         <td style="padding-bottom: 30px">
-                            Smoczy Jeźdźcy: Prawdy Wybrane + PDF - 1x 249.90 PLN
+                            {{Name}} - {{Quantity}}x {{Price}} PLN
+                        </td>
+                    </tr>
+                    {{/each}}
+                    <tr>
+                        <td style="padding-bottom: 30px">
+                            <b>Koszt wysyłki:</b> {{ShippingPrice}} PLN
                         </td>
                     </tr>
                     <tr>
                         <td style="padding-bottom: 30px">
-                            <b>Koszt wysyłki:</b> 14.90 PLN
+                            <b>Metoda płatności:</b> Zapłać z <a href="{{paymentLink}}">paynow.pl</a>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding-bottom: 30px">
-                            <b>Metoda płatności:</b> Zapłać z <a href="https://www.w3schools.com/tags/tag_colgroup.asp">paynow.pl</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding-bottom: 30px">
-                            <b>Łączna cena:</b> 264.80 PLN
+                            <b>Łączna cena:</b> {{TotalPrice}} PLN
                         </td>
                     </tr>
                     <tr>
@@ -107,15 +109,15 @@
                                 <b>Dane do płatności przelewem bankowym:</b><br>
                                 <b>Nazwa banku:</b> TestBank<br>
                                 <b>Nr konta:</b> 12 3456 7890 1234 5678 9012 3456<br>
-                                <b>Właściciel:</b> Blank Monk<br>
+                                <b>Właściciel:</b> Black Monk<br>
                                 <b>Adres:</b> ul. Testowa 1/2, 34-567 Poznań<br>
-                                <b>Tytuł przelewu:</b> 12345<br>
+                                <b>Tytuł przelewu:</b> {{OrderNumber}}<br>
                             </span>
                         </td>
                     </tr>
                     <tr>
                         <td style="text-align: center; padding-top: 40px; padding-bottom: 10px;">
-                            <a href="https://www.google.pl/index.html" target="_blank" style="text-decoration: none; background-color: #ecb22c; color: white; padding: 16px 24px; font-size: 20px; border-radius: 4px;">Śledź swoje zamówienie</a>
+                            <a href="{{OrderUrl}}" target="_blank" style="text-decoration: none; background-color: #ecb22c; color: white; padding: 16px 24px; font-size: 20px; border-radius: 4px;">Śledź swoje zamówienie</a>
                         </td>
                     </tr>
                 </table>

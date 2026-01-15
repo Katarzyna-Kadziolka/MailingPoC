@@ -11,8 +11,8 @@ public class MailhogService : IEmailService
     {
         TemplatesProvider templatesProvider = new();
 
-        var bodyHtml = templatesProvider.RenderTestTemplate();
-        var bodyText = await File.ReadAllTextAsync("Features/Emails/Templates/TestEmail.txt", cancellationToken);
+        var bodyHtml = templatesProvider.RenderTemplate(TemplatePath.OrderHtml);
+        var bodyText = templatesProvider.RenderTemplate(TemplatePath.OrderTxt);
         
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(email.SenderAddress, email.SenderAddress));

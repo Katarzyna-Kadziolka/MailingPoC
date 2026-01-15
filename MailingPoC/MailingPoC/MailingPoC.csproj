@@ -31,10 +31,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Features\Emails\Templates\TestEmail.html">
+      <None Update="Features\Emails\Templates\Order\OrderEmail.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="Features\Emails\Templates\TestEmail.txt">
+      <None Update="Features\Emails\Templates\Order\OrderEmail.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
