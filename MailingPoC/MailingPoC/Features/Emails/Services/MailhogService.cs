@@ -1,5 +1,4 @@
 using MailingPoC.Features.Emails.Requests.SendEmail;
-using MailingPoC.Features.Emails.Templates;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -9,10 +8,6 @@ public class MailhogService : IEmailService
 {
     public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-        TemplatesProvider templatesProvider = new();
-
-        var bodyHtml = templatesProvider.RenderTemplate(TemplatePath.OrderHtml);
-        var bodyText = templatesProvider.RenderTemplate(TemplatePath.OrderTxt);
         
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(email.SenderAddress, email.SenderAddress));
@@ -21,9 +16,10 @@ public class MailhogService : IEmailService
         
         var builder = new BodyBuilder
         {
-            HtmlBody = bodyHtml,
-            TextBody = bodyText
+            HtmlBody = email.BodyHtml,
+            TextBody = email.BodyText
         };
+
         message.Body = builder.ToMessageBody();
 
         using var client = new SmtpClient();
