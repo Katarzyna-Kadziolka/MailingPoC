@@ -1,4 +1,3 @@
-using MailingPoC.Features.Emails.Requests.SendEmail;
 using MailKit.Net.Smtp;
 using MimeKit;
 

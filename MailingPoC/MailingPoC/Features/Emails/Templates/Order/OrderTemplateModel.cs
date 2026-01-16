@@ -1,6 +1,7 @@
 namespace MailingPoC.Features.Emails.Templates.Order;
 
-public record OrderTemplateModel
+// Ścieżki tutaj jako atrybuty i wtedy rozwal całą architekturę i ją uprościsz
+public record OrderTemplateModel : ITemplateModel
 {
     public string UserName { get; set; }
     public string OrderNumber { get; set; }

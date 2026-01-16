@@ -1,5 +1,3 @@
-using MailingPoC.Features.Emails.Mappers;
-using MailingPoC.Features.Emails.Requests.SendEmail;
 using MailingPoC.Features.Emails.Requests.SendOrderEmail;
 using MailingPoC.Features.Emails.Services;
 using MailingPoC.Features.Emails.Templates;
@@ -10,16 +8,10 @@ namespace MailingPoC.Features.Emails.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class EmailsController(IEmailService emailService) : ControllerBase
+public class EmailsController(IEmailService emailService, ITemplatesProvider templatesProvider) : ControllerBase
 {
-    [HttpPost(nameof(SendEmail))]
-    public async Task<SendEmailResult> SendEmail([FromBody]SendEmailRequest request)
-    {
-        return await emailService.SendEmailAsync(request.ToEmail(), HttpContext.RequestAborted);
-    }
-
     [HttpPost(nameof(SendOrderEmail))]
-    public async Task<SendEmailResult> SendOrderEmail([FromBody]SendOrderEmailRequest request)
+    public async Task<SendOrderEmailResult> SendOrderEmail([FromBody]SendOrderEmailRequest request)
     {
         var data = new OrderTemplateModel
         {
@@ -34,21 +26,22 @@ public class EmailsController(IEmailService emailService) : ControllerBase
             TotalPrice = 264.80m,
             OrderUrl = "https://www.google.pl/index.html"
         };
+        var (html, text) = templatesProvider.RenderTemplate(TemplateModels.Order(data));
         
-        TemplatesProvider templatesProvider = new();
-        
-        var bodyHtml = templatesProvider.RenderTemplate(TemplatePath.OrderHtml, data);
-        var bodyText = templatesProvider.RenderTemplate(TemplatePath.OrderTxt, data);
-
         var email = new Email
         {
-            BodyHtml = bodyHtml,
-            BodyText = bodyText,
+            BodyHtml = html,
+            BodyText = text,
             Subject = "Order",
             SenderAddress = "noreply@poc.com",
             ToAddresses = ["test@test.com"]
         };
         
-        return await emailService.SendEmailAsync(email, HttpContext.RequestAborted);
+        var sendEmailResult = await emailService.SendEmailAsync(email, HttpContext.RequestAborted);
+        
+        return new SendOrderEmailResult
+        {
+            IsSuccess = sendEmailResult.IsSent
+        };
     }
 }

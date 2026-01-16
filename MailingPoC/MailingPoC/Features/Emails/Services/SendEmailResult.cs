@@ -1,4 +1,4 @@
-namespace MailingPoC.Features.Emails.Requests.SendEmail;
+namespace MailingPoC.Features.Emails.Services;
 
 public class SendEmailResult
 {

@@ -1,7 +1,6 @@
 using System.Net;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
-using MailingPoC.Features.Emails.Requests.SendEmail;
 using SendEmailRequest = Amazon.SimpleEmail.Model.SendEmailRequest;
 
 namespace MailingPoC.Features.Emails.Services;

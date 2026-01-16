@@ -2,33 +2,16 @@ using HandlebarsDotNet;
 
 namespace MailingPoC.Features.Emails.Templates;
 
-public class TemplatesProvider
+public class TemplatesProvider(IHandlebars handlebars) : ITemplatesProvider
 {
-    private readonly IHandlebars _handlebars;
-    private HandlebarsTemplate<object, object>? _headerTemplate;
-    private HandlebarsTemplate<object, object>? _footerTemplate;
-
-    public TemplatesProvider()
+    public (string Html, string Text) RenderTemplate<T>(TemplateModel<T> model) where T : ITemplateModel
     {
-        _handlebars = Handlebars.Create();
-
-        InitTemplates();
-    }
-
-    public string RenderTemplate(string path, object data)
-    {
-        _headerTemplate ??= _handlebars.Compile("{{>Header}}");
-        _footerTemplate ??= _handlebars.Compile("{{>Footer}}");
-
-        var template = _handlebars.Compile(File.ReadAllText(path));
-
-        var text = template(data);
-        return text;
-    }
-
-    private void InitTemplates()
-    {
-        _handlebars.RegisterTemplate("Header", File.ReadAllText(TemplatePath.HeaderHtml));
-        _handlebars.RegisterTemplate("Footer", File.ReadAllText(TemplatePath.FooterHtml));
+        var templateHtml = handlebars.Compile(File.ReadAllText(model.Html));
+        var html = templateHtml(model.Data);    
+        
+        var templateText = handlebars.Compile(File.ReadAllText(model.Text));
+        var text = templateText(model.Data);
+        
+        return (html,text);
     }
 }

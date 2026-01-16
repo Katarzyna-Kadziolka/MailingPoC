@@ -1,5 +1,3 @@
-using MailingPoC.Features.Emails.Requests.SendEmail;
-
 namespace MailingPoC.Features.Emails.Services;
 
 public interface IEmailService

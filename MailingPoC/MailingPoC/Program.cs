@@ -1,8 +1,11 @@
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.SimpleEmail;
+using HandlebarsDotNet;
 using LocalStack.Client.Extensions;
+using MailingPoC.Features.Emails.Factories;
 using MailingPoC.Features.Emails.Options;
 using MailingPoC.Features.Emails.Services;
+using MailingPoC.Features.Emails.Templates;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +25,9 @@ builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSServiceLocalStack<IAmazonSimpleEmailService>();
 
 builder.Services.AddOptions<SmtpOptions>().BindConfiguration(SmtpOptions.SectionName);
+
+builder.Services.AddSingleton<IHandlebars>(_ => HandlebarsFactory.Create());
+builder.Services.AddSingleton<ITemplatesProvider, TemplatesProvider>();
 
 var smtpOptions = builder.Configuration.GetSection(SmtpOptions.SectionName).Get<SmtpOptions>();
 if (smtpOptions!.UseLocalSmtp)
