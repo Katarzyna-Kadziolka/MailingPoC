@@ -5,17 +5,20 @@ namespace MailingPoC.Features.Emails.Templates;
 public class TemplatesProvider
 {
     private readonly IHandlebars _handlebars;
+    private HandlebarsTemplate<object, object>? _headerTemplate;
+    private HandlebarsTemplate<object, object>? _footerTemplate;
 
     public TemplatesProvider()
     {
         _handlebars = Handlebars.Create();
 
-        // InitTemplates();
+        InitTemplates();
     }
 
     public string RenderTemplate(string path, object data)
     {
-        // _orderTemplate ??= _handlebars.Compile("{{>OrderEmail_Template}}");
+        _headerTemplate ??= _handlebars.Compile("{{>Header}}");
+        _footerTemplate ??= _handlebars.Compile("{{>Footer}}");
 
         var template = _handlebars.Compile(File.ReadAllText(path));
 
@@ -25,8 +28,7 @@ public class TemplatesProvider
 
     private void InitTemplates()
     {
-        // header, footer
-        var path = Path.Combine("Features", "Emails", "Templates", "Order", "OrderEmail.html");
-        _handlebars.RegisterTemplate("OrderEmail_Template", File.ReadAllText(path));
+        _handlebars.RegisterTemplate("Header", File.ReadAllText(TemplatePath.HeaderHtml));
+        _handlebars.RegisterTemplate("Footer", File.ReadAllText(TemplatePath.FooterHtml));
     }
 }
