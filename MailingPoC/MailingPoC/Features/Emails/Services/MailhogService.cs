@@ -8,23 +8,12 @@ public class MailhogService : IEmailService
     public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
         var message = CreateEmailMessage(email);
+        
+        using var client = new SmtpClient();
+        await client.ConnectAsync("localhost", 1025, false, cancellationToken);
 
-        try
-        {
-            using var client = new SmtpClient();
-            await client.ConnectAsync("localhost", 1025, false, cancellationToken);
-
-            await client.SendAsync(message, cancellationToken);
-            await client.DisconnectAsync(true, cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            return new SendEmailResult
-            {
-                IsSent = false,
-                Exception = new Exception($"{nameof(MailhogService)} Error: {ex.Message}" , ex)
-            };
-        }
+        await client.SendAsync(message, cancellationToken);
+        await client.DisconnectAsync(true, cancellationToken);
         
         return new SendEmailResult
         {

@@ -1,4 +1,3 @@
-using Amazon.Extensions.NETCore.Setup;
 using Amazon.SimpleEmail;
 using HandlebarsDotNet;
 using LocalStack.Client.Extensions;

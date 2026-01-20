@@ -1,17 +1,14 @@
 namespace MailingPoC.Features.Emails.Templates.Order;
 
-[Paths("Features/Emails/Templates/Order/OrderEmail.html", "Features/Emails/Templates/Order/OrderEmail.txt")]
-public record OrderTemplateModel : ITemplateModel
-{
-    public string UserName { get; set; }
-    public string OrderNumber { get; set; }
-    public string OrderDate { get; set; }
-    public List<OrderItem> Products { get; set; }
-    public decimal ShippingPrice { get; set; }
-    public string PaymentLink { get; set; }
-    
-    public decimal TotalPrice { get; set;}
-    public string OrderUrl { get; set; }
-}
+[Paths(htmlPath:"Features/Emails/Templates/Order/OrderEmail.html", textPath:"Features/Emails/Templates/Order/OrderEmail.txt")]
+public record OrderTemplateModel(
+    string UserName,
+    string OrderNumber,
+    string OrderDate,
+    List<OrderItem> Products,
+    decimal ShippingPrice,
+    string PaymentLink,
+    decimal TotalPrice,
+    string OrderUrl) : ITemplateModel;
 
 public record OrderItem(string Name, int Quantity, decimal Price);

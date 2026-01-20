@@ -13,7 +13,7 @@ Lista produktów:
 {{#each Products}}
 {{Name}} - {{Quantity}}x {{Price}} PLN
 {{/each}}
-Koszt wysyłki: {ShippingPrice}} PLN
+Koszt wysyłki: {{ShippingPrice}} PLN
 Metoda płatności: Zapłać z paynow.pl
 Łączna cena: {{TotalPrice}} PLN
 Dane do płatności przelewem bankowym:
