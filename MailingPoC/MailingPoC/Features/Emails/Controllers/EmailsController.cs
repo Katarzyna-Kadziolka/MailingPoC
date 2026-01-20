@@ -26,7 +26,8 @@ public class EmailsController(IEmailService emailService, ITemplatesProvider tem
             TotalPrice = 264.80m,
             OrderUrl = "https://www.google.pl/index.html"
         };
-        var (html, text) = templatesProvider.RenderTemplate(TemplateModels.Order(data));
+        
+        var (html, text) = templatesProvider.RenderTemplate(data);
         
         var email = new Email
         {

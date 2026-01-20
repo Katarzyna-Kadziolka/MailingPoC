@@ -4,13 +4,15 @@ namespace MailingPoC.Features.Emails.Templates;
 
 public class TemplatesProvider(IHandlebars handlebars) : ITemplatesProvider
 {
-    public (string Html, string Text) RenderTemplate<T>(TemplateModel<T> model) where T : ITemplateModel
+    public (string Html, string Text) RenderTemplate(ITemplateModel model)
     {
-        var templateHtml = handlebars.Compile(File.ReadAllText(model.Html));
-        var html = templateHtml(model.Data);    
+        var pathsAttribute = (PathsAttribute) Attribute.GetCustomAttribute(typeof(ITemplateModel), typeof(PathsAttribute))!;
         
-        var templateText = handlebars.Compile(File.ReadAllText(model.Text));
-        var text = templateText(model.Data);
+        var templateHtml = handlebars.Compile(File.ReadAllText(pathsAttribute.HtmlPath));
+        var html = templateHtml(model);    
+        
+        var templateText = handlebars.Compile(File.ReadAllText(pathsAttribute.TextPath));
+        var text = templateText(model);
         
         return (html,text);
     }

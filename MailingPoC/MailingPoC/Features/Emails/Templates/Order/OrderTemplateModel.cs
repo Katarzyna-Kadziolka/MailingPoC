@@ -1,6 +1,6 @@
 namespace MailingPoC.Features.Emails.Templates.Order;
 
-// Ścieżki tutaj jako atrybuty i wtedy rozwal całą architekturę i ją uprościsz
+[Paths("Features/Emails/Templates/Order/OrderEmail.html", "Features/Emails/Templates/Order/OrderEmail.txt")]
 public record OrderTemplateModel : ITemplateModel
 {
     public string UserName { get; set; }

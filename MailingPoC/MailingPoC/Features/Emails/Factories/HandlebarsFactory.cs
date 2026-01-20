@@ -2,7 +2,7 @@ using HandlebarsDotNet;
 
 namespace MailingPoC.Features.Emails.Factories;
 
-public class HandlebarsFactory
+public static class HandlebarsFactory
 {
     public static IHandlebars Create()
     {
