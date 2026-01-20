@@ -17,12 +17,14 @@ public class MailhogService : IEmailService
             await client.SendAsync(message, cancellationToken);
             await client.DisconnectAsync(true, cancellationToken);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
-            throw;
+            return new SendEmailResult
+            {
+                IsSent = false,
+                Exception = new Exception($"{nameof(MailhogService)} Error: {ex.Message}" , ex)
+            };
         }
-
         
         return new SendEmailResult
         {

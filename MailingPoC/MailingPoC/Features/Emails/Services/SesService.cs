@@ -1,4 +1,6 @@
 using System.Net;
+using System.Runtime.InteropServices.JavaScript;
+using Amazon.Runtime;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using SendEmailRequest = Amazon.SimpleEmail.Model.SendEmailRequest;
@@ -10,17 +12,40 @@ public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IE
 
     public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-        await VerifyEmailIdentityAsync(email.SenderAddress, cancellationToken);
-
-        var request = CreateSendEmailRequest(email);
-
-        var response = await amazonSimpleEmailService.SendEmailAsync(request, cancellationToken);
-        if (response.HttpStatusCode != HttpStatusCode.OK)
+        try
         {
-            return new SendEmailResult { IsSent = false };
-        }
+            await VerifyEmailIdentityAsync(email.SenderAddress, cancellationToken);
 
-        return new SendEmailResult { IsSent = true };
+            var request = CreateSendEmailRequest(email);
+
+            await amazonSimpleEmailService.SendEmailAsync(request, cancellationToken);
+            
+            return new SendEmailResult { IsSent = true };
+        }
+        catch (AmazonSimpleEmailServiceException ex)
+        {
+            return new SendEmailResult 
+            { 
+                IsSent = false, 
+                Exception = new Exception($"SES Error: {ex.ErrorCode} - {ex.Message}", ex) 
+            };
+        }
+        catch (AmazonServiceException ex)
+        {
+            return new SendEmailResult 
+            { 
+                IsSent = false, 
+                Exception = new Exception($"AWS Service Error: {ex.Message}", ex) 
+            };
+        }
+        catch (Exception ex)
+        {
+            return new SendEmailResult
+            {
+                IsSent = false,
+                Exception = new Exception($"{nameof(SesService)} Error: {ex.Message}" , ex)
+            };
+        }
     }
 
     private static SendEmailRequest CreateSendEmailRequest(Email email)
