@@ -27,10 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Templates\TestEmail.cshtml" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Features\Emails\Templates\Order\OrderEmail.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
