@@ -6,16 +6,13 @@ namespace MailingPoC.Features.Emails.Services;
 
 public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IEmailService
 {
-
     public async Task<SendEmailResult> SendEmailAsync(Email email, CancellationToken cancellationToken = default)
     {
-            await VerifyEmailIdentityAsync(email.SenderAddress, cancellationToken);
+        var request = CreateSendEmailRequest(email);
 
-            var request = CreateSendEmailRequest(email);
+        await amazonSimpleEmailService.SendEmailAsync(request, cancellationToken);
 
-            await amazonSimpleEmailService.SendEmailAsync(request, cancellationToken);
-            
-            return new SendEmailResult { IsSent = true };
+        return new SendEmailResult { IsSent = true };
     }
 
     private static SendEmailRequest CreateSendEmailRequest(Email email)
@@ -51,16 +48,5 @@ public class SesService(IAmazonSimpleEmailService amazonSimpleEmailService) : IE
             },
             Source = email.SenderAddress
         };
-    }
-
-    private async Task VerifyEmailIdentityAsync(string recipientEmailAddress, CancellationToken cancellationToken = default)
-    {
-        await amazonSimpleEmailService.VerifyEmailIdentityAsync(
-            new VerifyEmailIdentityRequest
-            {
-                EmailAddress = recipientEmailAddress
-            },
-            cancellationToken
-        );
     }
 }
