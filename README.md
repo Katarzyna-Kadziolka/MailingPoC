@@ -9,7 +9,7 @@ Proof of concept for mailing.
 
 **See more on my [blog](https://chihuahuacoder.com/) :)**
 - [Dynamic emails with Handlebars.Net](https://chihuahuacoder.com/dynamic-emails-with-handlebarsnet)
-- How to set up AWS SES with LocalStack (soon)
+- [How to set up AWS SES with LocalStack](https://chihuahuacoder.com/how-to-set-up-aws-ses-with-localstack?showSharer=true)
 
 ### License
 This project is licensed under the MIT License - see the [LICENSE](https://raw.githubusercontent.com/Katarzyna-Kadziolka/MailingPoC/refs/heads/main/LICENSE) file for details.
